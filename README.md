@@ -33,7 +33,7 @@ Visitors don't just read Juno's story—they actively **bring her into existence
 
 ---
 
-## 🎨 2D Character Animation (Strictly 2D, No Voice)
+##  2D Character Animation (Strictly 2D, No Voice)
 
 - **Pure Layered 2D SVG:** Constructed from separately controllable layers (tail, body, arms, head, turban, eye whites, clipped pupils, eyelids, mouth, and sparkles).
 - **Cursor Tracking Eyes:** Pupils lerp smoothly toward cursor coordinates, constrained strictly within eye whites, and return to center upon leaving the window. Disabled gracefully on touch devices.
@@ -42,7 +42,7 @@ Visitors don't just read Juno's story—they actively **bring her into existence
 
 ---
 
-## 🚀 How to Run
+## How to Run
 
 1. Open the project folder:
    ```bash
@@ -56,7 +56,7 @@ Visitors don't just read Juno's story—they actively **bring her into existence
 
 ---
 
-## 🗺️ Seven Hidden Stars Guide (Spoiler Warning)
+## Seven Hidden Stars Guide (Spoiler Warning)
 
 1. **Star #1:** Click the small golden star near the glowing moon in the Hero section (peeking behind a cloud).
 2. **Star #2:** Send a wish into the Wish Machine containing the word `"star"`, `"juno"`, or `"dream"`.
