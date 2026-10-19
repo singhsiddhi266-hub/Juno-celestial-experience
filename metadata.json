@@ -1,0 +1,6 @@
+{
+  "name": "Juno — The Wish That Fell From the Stars",
+  "description": "An interactive celestial fantasy experience and living magical worlds with Juno, the baby genie.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

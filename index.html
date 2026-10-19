@@ -1,0 +1,1475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Juno — The Wish That Fell From the Stars</title>
+  <meta name="description" content="An interactive celestial fantasy storybook experience with Juno, a tiny baby genie born from a fallen star. Explore magical dream worlds, make wishes, and uncover cosmic secrets.">
+
+  <!-- Favicon Star Icon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>✨</text></svg>">
+
+  <!-- Stylesheets -->
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/juno.css">
+  <link rel="stylesheet" href="css/story.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+
+  <!-- Dynamic Starfield Background Canvas -->
+  <canvas id="celestial-canvas"></canvas>
+
+  <!-- Ambient Ethereal Glows -->
+  <div class="ambient-glow-1"></div>
+  <div class="ambient-glow-2"></div>
+
+  <!-- Nightlight / Flashlight Dark Overlay -->
+  <div id="nightlight-overlay"></div>
+
+  <!-- Star Discovery Toast Notification -->
+  <div id="star-discovery-toast" class="star-discovery-toast" role="alert" aria-live="assertive">
+    <div style="font-size: 2rem;">⭐</div>
+    <div>
+      <div style="font-weight: 700; color: var(--magical-gold); font-size: 0.95rem;">Hidden Star Discovered!</div>
+      <div id="star-toast-text" style="font-size: 0.85rem; color: var(--cream);">You uncovered a cosmic secret.</div>
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MAIN NAVIGATION HEADER
+       ======================================================================== -->
+  <header class="main-header">
+    <div class="nav-container">
+      <a href="#hero" class="brand-logo" aria-label="Juno Home">
+        <svg class="brand-icon" viewBox="0 0 40 40" fill="none">
+          <circle cx="20" cy="20" r="18" fill="url(#brandGrad)" />
+          <path d="M 20 6 L 23 15 L 32 17 L 25 23 L 27 32 L 20 27 L 13 32 L 15 23 L 8 17 L 17 15 Z" fill="#FFD778" />
+          <defs>
+            <linearGradient id="brandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" stop-color="#202653" />
+              <stop offset="100%" stop-color="#10132F" />
+            </linearGradient>
+          </defs>
+        </svg>
+        <div class="brand-text">
+          <span class="brand-title">JUNO</span>
+          <span class="brand-tagline">A Little Genie. A Lot of Dreams.</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Menu -->
+      <nav>
+        <ul class="nav-links">
+          <li><a href="#story" class="nav-link">Birth Story</a></li>
+          <li><a href="#meet-juno" class="nav-link">Meet Juno</a></li>
+          <li><a href="#wish-machine" class="nav-link">Wish Machine</a></li>
+          <li><a href="#magic-toolbox" class="nav-link">Magic Toolbox</a></li>
+          <li><a href="#destinations" class="nav-link">Dream Worlds</a></li>
+          <li><a href="#storybook" class="nav-link">Storybook</a></li>
+          <li><a href="#mini-game" class="nav-link">Mini-Game</a></li>
+          <li><a href="#lullaby-lab" class="nav-link">Music Box</a></li>
+        </ul>
+      </nav>
+
+      <!-- HUD Controls: Stars Tracker, Flashlight, Audio -->
+      <div class="nav-controls">
+        <button id="star-tracker-hud-btn" class="star-tracker-btn" title="Stars Found: Click to open Star Codex">
+          <span class="star-icon">⭐</span>
+          <span id="star-hud-count">0/7</span>
+        </button>
+
+        <button id="global-nightlight-btn" class="hud-icon-btn" title="Turn Nightlight On or Off" aria-label="Toggle Nightlight Mode">
+          🕯️
+        </button>
+
+        <button id="global-mute-btn" class="hud-icon-btn" title="Turn Music On or Off" aria-label="Toggle Music">
+          🎵
+        </button>
+
+        <button class="mobile-nav-toggle" aria-label="Toggle Navigation Menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- ======================================================================
+         SECTION A: THE HERO
+         ====================================================================== -->
+    <section id="hero" class="hero-section" style="min-height: 94vh; display: flex; align-items: center; position: relative;">
+      <div class="container" style="display: grid; grid-template-columns: 1.15fr 0.85fr; gap: 40px; align-items: center; position: relative;">
+        <div class="hero-content">
+          <div class="tagline-badge">
+            <span class="sparkle-icon">✦</span>• A Magical Storybook Experience
+          </div>
+          <h1 class="display-title">Every wish hides a world.</h1>
+          <p style="font-size: 1.25rem; color: var(--cream); margin-bottom: 12px; font-weight: 300; max-width: 580px; line-height: 1.6;">
+            Meet <strong style="color: var(--magical-gold); font-weight: 600;">Juno</strong>, a tiny baby genie born from a falling star. She woke up inside an old golden lamp in a quiet desert. Now she explores the magical worlds inside people's wishes.
+          </p>
+          <p style="font-size: 1rem; color: var(--pale-cyan); margin-bottom: 36px; max-width: 540px; font-style: italic;">
+            “A little genie. A lot of dreams.” Explore her story instead of just reading it.
+          </p>
+          <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+            <a href="#story" class="btn btn-primary">✨ See Juno's Story</a>
+            <a href="#meet-juno" class="btn btn-secondary">💫 Meet Juno</a>
+          </div>
+        </div>
+
+        <!-- Juno Hero Interactive 2D Character Showcase with Celestial Moon & Cloud -->
+        <div style="display: flex; flex-direction: column; align-items: center; position: relative;">
+          <!-- Celestial Moon & Cloud with Hidden Star #1 -->
+          <div class="hero-moon-cloud-group">
+            <!-- Glowing Moon -->
+            <svg class="hero-celestial-moon" viewBox="0 0 120 120" width="110" height="110" aria-hidden="true">
+              <defs>
+                <radialGradient id="heroMoonGlow" cx="45%" cy="45%" r="50%">
+                  <stop offset="0%" stop-color="#FFFDF8" />
+                  <stop offset="60%" stop-color="#FFD778" />
+                  <stop offset="90%" stop-color="#EAB308" />
+                  <stop offset="100%" stop-color="rgba(234, 179, 8, 0)" />
+                </radialGradient>
+              </defs>
+              <circle cx="60" cy="60" r="42" fill="url(#heroMoonGlow)" opacity="0.35" />
+              <path d="M 64 22 C 40 22 24 38 24 62 C 24 84 40 102 64 102 C 50 94 42 78 42 62 C 42 44 50 30 64 22 Z" fill="#FFF8E7" />
+              <path d="M 62 25 C 42 27 28 42 28 62 C 28 81 42 97 62 99 C 50 92 44 78 44 62 C 44 45 50 32 62 25 Z" fill="#FFEDB3" opacity="0.8" />
+            </svg>
+
+            <!-- Hidden Star #1: Tucked near the moon behind a nearby soft cloud -->
+            <div id="hero-moon-secret-star" class="hero-moon-star hidden-star-trigger" data-star-id="1" 
+                 role="button" tabindex="0" aria-label="A sparkling star near the moon" title="Something is sparkling here...">
+              <svg width="34" height="34" viewBox="0 0 34 34">
+                <defs>
+                  <radialGradient id="starGlowGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#FFFFFF" />
+                    <stop offset="50%" stop-color="#FFD778" />
+                    <stop offset="100%" stop-color="#D97706" />
+                  </radialGradient>
+                </defs>
+                <circle cx="17" cy="17" r="14" fill="rgba(255, 215, 120, 0.35)" class="hero-star-glow-halo" />
+                <polygon points="17,3 20,12 30,14 22,21 24,31 17,26 10,31 12,21 4,14 14,12" fill="url(#starGlowGrad)" />
+              </svg>
+            </div>
+
+            <!-- Soft Dreamy Cloud tucking the star -->
+            <svg class="hero-celestial-cloud" viewBox="0 0 180 80" width="160" height="70" aria-hidden="true">
+              <defs>
+                <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="rgba(184, 165, 255, 0.45)" />
+                  <stop offset="50%" stop-color="rgba(100, 214, 208, 0.35)" />
+                  <stop offset="100%" stop-color="rgba(32, 38, 83, 0.85)" />
+                </linearGradient>
+              </defs>
+              <path d="M 25 60 Q 15 60 15 50 Q 15 38 28 36 Q 34 20 54 22 Q 68 12 88 18 Q 104 8 124 16 Q 146 16 150 32 Q 165 35 165 48 Q 165 60 150 60 Z" fill="url(#cloudGrad)" />
+            </svg>
+          </div>
+
+          <!-- 2D Layered Juno Container -->
+          <div id="hero-juno-container"></div>
+
+          <!-- Ancient Golden Lamp resting on soft celestial cloud -->
+          <div style="margin-top: -30px; position: relative; z-index: 1; text-align: center;">
+            <svg width="220" height="90" viewBox="0 0 220 90" fill="none">
+              <!-- Golden Ancient Lamp -->
+              <path d="M 30 55 C 30 35 75 32 110 32 C 145 32 190 35 190 55 C 190 70 145 78 110 78 C 75 78 30 70 30 55 Z" fill="url(#heroLampGrad)" />
+              <path d="M 175 42 Q 210 25 205 18 Q 195 14 170 34 Z" fill="url(#heroLampGrad)" /> <!-- Spout -->
+              <path d="M 45 42 Q 10 25 15 15 Q 25 10 50 35 Z" fill="url(#heroLampGrad)" /> <!-- Handle -->
+              <ellipse cx="110" cy="30" rx="30" ry="10" fill="#FFE599" />
+              <circle cx="110" cy="18" r="6" fill="#FFD778" />
+
+              <!-- Decorative Lamp Medallion (Star #1 moved to Moon) -->
+              <circle cx="110" cy="55" r="14" fill="#202653" stroke="#FFD778" stroke-width="1.5" />
+              <polygon points="110,44 114,51 122,52 116,57 118,65 110,61 102,65 104,57 98,52 106,51" fill="#FFD778" />
+
+              <defs>
+                <linearGradient id="heroLampGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#FFF5E8" />
+                  <stop offset="40%" stop-color="#FFD778" />
+                  <stop offset="100%" stop-color="#B45309" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div style="font-size: 0.78rem; color: var(--magical-gold); letter-spacing: 0.08em; text-transform: uppercase; margin-top: -8px;">
+              The Ancient Desert Lamp
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION B: JUNO'S INTERACTIVE BIRTH STORY (CENTERPIECE)
+         ====================================================================== -->
+    <section id="story" class="story-experience-section">
+      <div class="container">
+        <h2 class="section-title">The Wish That Fell From the Stars</h2>
+        <p class="section-subtitle">Help Juno wake up and discover her first wish in this interactive story.</p>
+
+        <!-- 6-Star Progress Indicator & Story Controls -->
+        <div class="story-progress-container">
+          <div class="story-progress-stars">
+            <div class="story-star-node active" data-chapter="0" title="Beginning: Sleeping Stars">✦</div>
+            <div class="story-star-node" data-chapter="1" title="Chapter 1: The Falling Star">1</div>
+            <div class="story-star-node" data-chapter="2" title="Chapter 2: The Golden Lamp">2</div>
+            <div class="story-star-node" data-chapter="3" title="Chapter 3: Juno Wakes Up">3</div>
+            <div class="story-star-node" data-chapter="4" title="Chapter 4: Her First Wish">4</div>
+            <div class="story-star-node" data-chapter="5" title="Chapter 5: Worlds in Wishes">5</div>
+            <div class="story-star-node" data-chapter="6" title="Ending: The First Star">⭐</div>
+          </div>
+          <div class="story-controls-bar">
+            <button id="story-skip-btn" class="story-control-btn" title="Skip to finale">Skip Ahead ⏭</button>
+            <button id="story-restart-btn" class="story-control-btn" title="Start story over">↺ Start Over</button>
+          </div>
+        </div>
+
+        <!-- Story Stage Frame -->
+        <div class="story-stage-viewport">
+
+          <!-- CHAPTER 0: PROLOGUE — The Sleeping Universe -->
+          <div id="story-chapter-0" class="story-chapter active">
+            <span class="chapter-badge">Beginning</span>
+            <h3 class="chapter-verse">“Somewhere, a little wish was waiting for someone to find it.”</h3>
+            <p style="font-size: 0.95rem; color: var(--pale-cyan); margin-bottom: 20px;">
+              Click the 3 sleeping stars to wake up the sky.
+            </p>
+
+            <div class="sleeping-universe-sky">
+              <div class="sleeping-star" style="top: 25%; left: 20%;" title="Wake up this star">✦</div>
+              <div class="sleeping-star" style="top: 60%; left: 50%;" title="Wake up this star">✦</div>
+              <div class="sleeping-star" style="top: 30%; left: 80%;" title="Wake up this star">✦</div>
+            </div>
+
+            <button id="prologue-follow-btn" class="btn btn-primary" style="display: none;">
+              Follow the Falling Star →
+            </button>
+          </div>
+
+          <!-- CHAPTER 1: A Star With a Secret -->
+          <div id="story-chapter-1" class="story-chapter">
+            <span class="chapter-badge">Chapter 1</span>
+            <h3 class="chapter-verse">“One little star. One forgotten wish.”</h3>
+            <p style="font-size: 0.95rem; color: var(--pale-cyan); margin-bottom: 16px;">
+              Click or drag the falling star down to the purple sand.
+            </p>
+
+            <div class="desert-interactive-scene">
+              <div class="dune-layer"></div>
+              <div id="guide-star-draggable" class="guide-star-draggable" title="Click or guide the star to the sand!">⭐</div>
+              <div id="buried-lamp-spot" class="buried-lamp-spot">Sand Dune</div>
+            </div>
+
+            <button id="ch1-next-btn" class="btn btn-primary" style="display: none; margin-top: 20px;">
+              Go to the Lamp →
+            </button>
+          </div>
+
+          <!-- CHAPTER 2: The Forgotten Lamp -->
+          <div id="story-chapter-2" class="story-chapter">
+            <span class="chapter-badge">Chapter 2</span>
+            <h3 class="chapter-verse">“This lamp had been waiting for a very long time.”</h3>
+            <p style="font-size: 0.95rem; color: var(--pale-cyan); margin-bottom: 16px;">
+              Wipe away the sand with your mouse or finger to uncover the lamp.
+            </p>
+
+            <div class="lamp-brush-container">
+              <div class="lamp-revealed-art">
+                <svg width="340" height="180" viewBox="0 0 340 180">
+                  <path d="M 60 100 C 60 60 130 55 170 55 C 210 55 280 60 280 100 C 280 130 210 145 170 145 C 130 145 60 130 60 100 Z" fill="url(#heroLampGrad)" />
+                  <path d="M 260 80 Q 320 50 310 40 Q 290 35 250 68 Z" fill="url(#heroLampGrad)" />
+                  <path d="M 80 80 Q 20 50 30 35 Q 50 30 90 70 Z" fill="url(#heroLampGrad)" />
+                  <ellipse cx="170" cy="50" rx="45" ry="16" fill="#FFE599" />
+                  <circle cx="170" cy="30" r="10" fill="#FFD778" />
+                  <circle cx="170" cy="100" r="18" fill="#202653" stroke="#FFD778" stroke-width="2" />
+                  <polygon points="170,88 174,96 182,97 176,103 178,111 170,107 162,111 164,103 158,97 166,96" fill="#FFD778" />
+                </svg>
+              </div>
+              <canvas id="sand-scratch-canvas"></canvas>
+            </div>
+
+            <button id="open-lamp-btn" class="btn btn-primary" style="display: none;">
+              ✨ Open the Lamp
+            </button>
+          </div>
+
+          <!-- CHAPTER 3: A Little Genie Awakens -->
+          <div id="story-chapter-3" class="story-chapter">
+            <span class="chapter-badge">Chapter 3</span>
+            <h3 class="chapter-verse">“A Little Genie Awakens.”</h3>
+            <p style="font-size: 0.95rem; color: var(--pale-cyan); margin-bottom: 24px;">
+              Pick three magical sparks to wake Juno up:
+            </p>
+
+            <div class="awakening-container">
+              <div class="sparks-selector-panel">
+                <button class="magic-spark-btn" data-spark="gold">
+                  <span class="spark-icon-circle">🌟</span>
+                  <div>
+                    <div style="font-weight: 600;">Golden Starlight</div>
+                    <div style="font-size: 0.78rem; color: var(--pale-cyan);">Gives Juno warmth and happy energy</div>
+                  </div>
+                </button>
+                <button class="magic-spark-btn" data-spark="mist">
+                  <span class="spark-icon-circle">💜</span>
+                  <div>
+                    <div style="font-weight: 600;">Purple Mist</div>
+                    <div style="font-size: 0.78rem; color: var(--pale-cyan);">Shapes her soft genie body and tail</div>
+                  </div>
+                </button>
+                <button class="magic-spark-btn" data-spark="wonder">
+                  <span class="spark-icon-circle">💠</span>
+                  <div>
+                    <div style="font-weight: 600;">Blue Wonder</div>
+                    <div style="font-size: 0.78rem; color: var(--pale-cyan);">Lights up her big eyes and turban gem</div>
+                  </div>
+                </button>
+              </div>
+
+              <!-- Silhouette turning into Juno -->
+              <div id="juno-awakening-avatar" style="transition: filter 0.5s ease;">
+                <svg width="220" height="260" viewBox="0 0 300 360">
+                  <path d="M 150 235 Q 115 270 148 310 Q 170 338 140 350 Q 110 358 125 325 Q 142 285 146 235 Z" fill="#64D6D0" opacity="0.4" />
+                  <ellipse cx="150" cy="160" rx="35" ry="40" fill="#DDD6FE" opacity="0.3" />
+                  <path d="M 120 140 C 115 90 145 75 150 75 C 155 75 185 90 180 140 Z" fill="#2DD4BF" opacity="0.3" />
+                </svg>
+              </div>
+            </div>
+
+            <button id="ch3-next-btn" class="btn btn-primary" style="display: none; margin-top: 24px;">
+              Make Her First Wish →
+            </button>
+          </div>
+
+          <!-- CHAPTER 4: Her First Wish -->
+          <div id="story-chapter-4" class="story-chapter">
+            <span class="chapter-badge">Chapter 4</span>
+            <h3 class="chapter-verse">“Her First Wish”</h3>
+            <p style="font-size: 0.95rem; color: var(--pale-cyan); margin-bottom: 20px;">
+              Pick one wish. Watch the sky change around you:
+            </p>
+
+            <div class="wishes-selection-grid">
+              <div class="wish-choice-card" data-wish="moon">
+                <div class="wish-choice-icon">🌙</div>
+                <div class="wish-choice-title">The Moon's Path</div>
+                <div class="wish-choice-quote">“I wish someone could find their way home.”</div>
+              </div>
+              <div class="wish-choice-card" data-wish="star">
+                <div class="wish-choice-icon">⭐</div>
+                <div class="wish-choice-title">The Shining Stars</div>
+                <div class="wish-choice-quote">“I wish every lonely dream could shine again.”</div>
+              </div>
+              <div class="wish-choice-card" data-wish="flower">
+                <div class="wish-choice-icon">🌸</div>
+                <div class="wish-choice-title">The Blooming Flowers</div>
+                <div class="wish-choice-quote">“I wish forgotten things could bloom again.”</div>
+              </div>
+            </div>
+
+            <button id="ch4-next-btn" class="btn btn-primary" style="display: none; margin-top: 16px;">
+              Explore the Dream World →
+            </button>
+          </div>
+
+          <!-- CHAPTER 5: The World Inside a Wish -->
+          <div id="story-chapter-5" class="story-chapter">
+            <span class="chapter-badge">Chapter 5</span>
+            <h3 class="chapter-verse">“Every wish hides a world.”</h3>
+            <p style="font-size: 0.95rem; color: var(--pale-cyan); margin-bottom: 20px;">
+              Click each place to see what magic is inside:
+            </p>
+
+            <div class="wish-destinations-row">
+              <div class="dest-preview-card" data-dest="kingdom">
+                <div style="font-size: 2.5rem; margin-bottom: 8px;">🏰</div>
+                <div style="font-weight: 600; color: var(--cream);">Wishfall Kingdom</div>
+                <div style="font-size: 0.8rem; color: var(--pale-cyan); margin-top: 4px;">Click to build the crystal bridge</div>
+              </div>
+              <div class="dest-preview-card" data-dest="garden">
+                <div style="font-size: 2.5rem; margin-bottom: 8px;">🪷</div>
+                <div style="font-weight: 600; color: var(--cream);">Moonlit Garden</div>
+                <div style="font-size: 0.8rem; color: var(--pale-cyan); margin-top: 4px;">Click to make the moon lotus bloom</div>
+              </div>
+              <div class="dest-preview-card" data-dest="library">
+                <div style="font-size: 2.5rem; margin-bottom: 8px;">📖</div>
+                <div style="font-weight: 600; color: var(--cream);">Dream Library</div>
+                <div style="font-size: 0.8rem; color: var(--pale-cyan); margin-top: 4px;">Click to read a secret wish</div>
+              </div>
+              <div class="dest-preview-card" data-dest="observatory">
+                <div style="font-size: 2.5rem; margin-bottom: 8px;">🔭</div>
+                <div style="font-weight: 600; color: var(--cream);">Stardust Observatory</div>
+                <div style="font-size: 0.8rem; color: var(--pale-cyan); margin-top: 4px;">Click to draw the wish constellation</div>
+              </div>
+            </div>
+
+            <button id="ch5-next-btn" class="btn btn-primary" style="display: none; margin-top: 24px;">
+              Find the Final Star →
+            </button>
+          </div>
+
+          <!-- FINALE: The First Star -->
+          <div id="story-chapter-6" class="story-chapter">
+            <span class="chapter-badge">The Ending</span>
+            <h3 class="chapter-verse">“You helped me wake up. Will you help me find the next wish?”</h3>
+            <p id="finale-story-dialogue" style="font-size: 1.05rem; color: var(--cream); font-style: italic; margin-bottom: 16px;">
+              Click the glowing star to place it on Juno's turban.
+            </p>
+
+            <!-- Final glowing star beacon -->
+            <div id="finale-star-beacon" class="finale-star-target" title="Click to place the star on Juno's turban!">
+              ⭐
+            </div>
+
+            <div style="margin-top: 20px; display: flex; gap: 16px; flex-wrap: wrap; justify-content: center;">
+              <button id="finale-explore-btn" class="btn btn-primary" style="display: none;">
+                ✨ Explore Juno's Worlds
+              </button>
+              <button id="finale-relive-btn" class="btn btn-secondary">
+                ↺ Start the Story Over
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION C: MEET JUNO (Character & Dialogue Console)
+         ====================================================================== -->
+    <section id="meet-juno" class="container">
+      <h2 class="section-title">Meet Juno</h2>
+      <p class="section-subtitle">A curious, playful baby genie who loves the little worlds inside our wishes.</p>
+
+      <div class="meet-juno-grid celestial-card">
+        <!-- Left Column: Portrait Showcase -->
+        <div class="meet-juno-portrait-panel">
+          <div id="meet-juno-container"></div>
+          <div style="text-align: center; margin-top: 8px;">
+            <div style="font-weight: 700; font-size: 1.2rem; color: var(--magical-gold);">Juno</div>
+            <div style="font-size: 0.85rem; color: var(--lavender);">Baby Genie • Born from a Falling Star</div>
+          </div>
+        </div>
+
+        <!-- Right Column: Backstory & Interactive Dialogue Console -->
+        <div class="meet-juno-dialogue-console">
+          <p style="font-size: 1.05rem; color: var(--cream); line-height: 1.7;">
+            A shooting star fell into the quiet desert and touched an old golden lamp. Soft purple smoke curled into the air, sparks danced, and Juno opened her eyes under the stars.
+          </p>
+
+          <div>
+            <div style="font-size: 0.88rem; font-weight: 600; color: var(--magical-gold); text-transform: uppercase; letter-spacing: 0.08em;">
+              Ask Juno a Question:
+            </div>
+            <div class="dialogue-prompt-list">
+              <button class="dialogue-prompt-btn" data-dialogue="past">📖 “Where did you come from?”</button>
+              <button class="dialogue-prompt-btn" data-dialogue="place">🌸 “What is your favorite place?”</button>
+              <button class="dialogue-prompt-btn" data-dialogue="wish">⭐ “What is a forgotten wish?”</button>
+              <button class="dialogue-prompt-btn" data-dialogue="magic">✨ “Show me something magical!”</button>
+            </div>
+          </div>
+
+          <!-- Speech Box Display -->
+          <div class="juno-speech-display-box">
+            <span id="meet-juno-speech-text">“Tap any question above or tap me to chat! I speak through these little notes.”</span>
+          </div>
+
+          <!-- Trait Badges -->
+          <div class="juno-traits-row">
+            <div class="juno-trait-badge">
+              <div class="trait-icon">🌟</div>
+              <div class="trait-title">Curious</div>
+              <div class="trait-desc">Loves finding secret paths</div>
+            </div>
+            <div class="juno-trait-badge">
+              <div class="trait-icon">💜</div>
+              <div class="trait-title">Kind</div>
+              <div class="trait-desc">Cares for quiet dreams</div>
+            </div>
+            <div class="juno-trait-badge">
+              <div class="trait-icon">✨</div>
+              <div class="trait-title">Playful</div>
+              <div class="trait-desc">Hides shiny stars to find</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION D: THE WISH MACHINE
+         ====================================================================== -->
+    <section id="wish-machine" class="container">
+      <h2 class="section-title">The Wish Machine</h2>
+      <p class="section-subtitle">“What would you wish for if the stars were listening?”</p>
+
+      <div class="wish-machine-container celestial-card">
+        <div class="wish-input-panel">
+          <textarea id="wish-textarea" class="wish-textarea" maxlength="160" placeholder="Type your wish here... (for example: 'I hope tomorrow is a happy day')"></textarea>
+
+          <div class="mood-selector-group">
+            <span class="mood-pill-label">Choose Wish Mood:</span>
+            <button class="mood-pill-btn active" data-mood="hopeful">✨ Hopeful</button>
+            <button class="mood-pill-btn" data-mood="adventurous">🚀 Adventurous</button>
+            <button class="mood-pill-btn" data-mood="peaceful">🌿 Peaceful</button>
+            <button class="mood-pill-btn" data-mood="mysterious">🔮 Mysterious</button>
+          </div>
+
+          <button id="cast-wish-btn" class="btn btn-primary" style="align-self: flex-start;">
+            🌟 Send Wish to the Stars
+          </button>
+        </div>
+
+        <div>
+          <div style="font-weight: 600; color: var(--cream); font-size: 1.1rem; margin-bottom: 6px;">
+            The Star Sky of Wishes
+          </div>
+          <div style="font-size: 0.85rem; color: var(--pale-cyan); margin-bottom: 16px;">
+            Click any star to read wishes from other dreamers:
+          </div>
+          <div id="wish-constellation-sky" class="wish-constellation-sky"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION E: MAGIC TOOLBOX (Celestial Alchemy Mixer)
+         ====================================================================== -->
+    <section id="magic-toolbox" class="container">
+      <h2 class="section-title">The Magic Toolbox</h2>
+      <p class="section-subtitle">Pick three ingredients and mix them together to create something magical.</p>
+
+      <div class="alchemy-grid celestial-card">
+        <!-- Left: Ingredients Deck -->
+        <div>
+          <div id="toolbox-counter" style="font-weight: 600; color: var(--magical-gold); margin-bottom: 16px; font-size: 0.95rem;">
+            Pick 3 ingredients (0/3 chosen)
+          </div>
+          <div class="ingredients-deck">
+            <div class="ingredient-card" data-ingredient="moondust">
+              <div class="ingredient-icon">🌙</div>
+              <div>
+                <div class="ingredient-title">Moon Dust</div>
+                <div class="ingredient-desc">Soft silver glow</div>
+              </div>
+            </div>
+            <div class="ingredient-card" data-ingredient="stardust">
+              <div class="ingredient-icon">⭐</div>
+              <div>
+                <div class="ingredient-title">Stardust</div>
+                <div class="ingredient-desc">Warm golden light</div>
+              </div>
+            </div>
+            <div class="ingredient-card" data-ingredient="petals">
+              <div class="ingredient-icon">🌸</div>
+              <div>
+                <div class="ingredient-title">Dream Petals</div>
+                <div class="ingredient-desc">Sweet spring breeze</div>
+              </div>
+            </div>
+            <div class="ingredient-card" data-ingredient="cloud">
+              <div class="ingredient-icon">☁️</div>
+              <div>
+                <div class="ingredient-title">Cloud Drop</div>
+                <div class="ingredient-desc">Soft morning mist</div>
+              </div>
+            </div>
+            <div class="ingredient-card" data-ingredient="memory">
+              <div class="ingredient-icon">🗝️</div>
+              <div>
+                <div class="ingredient-title">Old Memory</div>
+                <div class="ingredient-desc">A sweet, quiet thought</div>
+              </div>
+            </div>
+            <div class="ingredient-card" data-ingredient="spark">
+              <div class="ingredient-icon">⚡</div>
+              <div>
+                <div class="ingredient-title">Golden Spark</div>
+                <div class="ingredient-desc">A tiny falling star spark</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 24px; display: flex; gap: 12px;">
+            <button id="mix-magic-btn" class="btn btn-primary disabled" disabled>
+              ✨ Mix the Magic
+            </button>
+            <button id="reset-toolbox-btn" class="btn btn-secondary">
+              ↺ Start Over
+            </button>
+          </div>
+        </div>
+
+        <!-- Right: Cauldron & Result Display -->
+        <div class="alchemy-cauldron-stage">
+          <div id="alchemy-result-container">
+            <div style="font-size: 4rem; margin-bottom: 12px; filter: drop-shadow(0 0 20px var(--lavender));">🔮</div>
+            <div style="color: rgba(255, 245, 232, 0.4); font-style: italic;">
+              Pick three items on the left and click "Mix the Magic" to see what happens!
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION F: DREAM DESTINATIONS (4 Magical Worlds)
+         ====================================================================== -->
+    <section id="destinations" class="container">
+      <h2 class="section-title">Dream Worlds</h2>
+      <p class="section-subtitle">Four magical places that Juno loves to visit. Click any place to explore it!</p>
+
+      <div class="destinations-grid">
+        <!-- 1. Wishfall Kingdom -->
+        <div id="dest-card-kingdom" class="destination-card">
+          <div class="dest-bg-art" style="background: radial-gradient(circle at 60% 40%, #583c84 0%, #15193d 80%);"></div>
+          <div class="dest-content">
+            <h3 class="dest-title">🏰 Wishfall Kingdom</h3>
+            <p class="dest-desc">Floating islands with warm golden waterfalls and glowing bridges made of hope.</p>
+            <button id="kingdom-action-btn" class="dest-interactive-action-btn">
+              ✨ Build the Light Bridge
+            </button>
+          </div>
+        </div>
+
+        <!-- 2. Moonlit Garden -->
+        <div id="dest-card-garden" class="destination-card">
+          <div class="dest-bg-art" style="background: radial-gradient(circle at 40% 50%, #204c6d 0%, #10132F 80%);"></div>
+          <div class="dest-content">
+            <h3 class="dest-title">🪷 Moonlit Garden</h3>
+            <p class="dest-desc">Quiet silver ponds, gentle water lilies, and soft glowing moths dancing in the air.</p>
+            <button id="garden-action-btn" class="dest-interactive-action-btn">
+              🌸 Open the Moon Flower
+            </button>
+          </div>
+        </div>
+
+        <!-- 3. Infinite Dream Library -->
+        <div id="dest-card-library" class="destination-card">
+          <div class="dest-bg-art" style="background: radial-gradient(circle at 50% 30%, #3a2768 0%, #0d1027 80%);"></div>
+          <div class="dest-content">
+            <h3 class="dest-title">📖 Dream Library</h3>
+            <p class="dest-desc">Endless floating bookshelves, glowing story pages, and comets flying by.</p>
+            <button id="library-action-btn" class="dest-interactive-action-btn">
+              📜 Open an Old Storybook
+            </button>
+          </div>
+        </div>
+
+        <!-- 4. Stardust Observatory -->
+        <div id="dest-card-observatory" class="destination-card">
+          <div class="dest-bg-art" style="background: radial-gradient(circle at 70% 60%, #1f5768 0%, #10132F 80%);"></div>
+          <div class="dest-content">
+            <h3 class="dest-title">🔭 Stardust Observatory</h3>
+            <p class="dest-desc">Big golden telescopes and bright stars waiting to connect into shapes.</p>
+            <button id="observatory-action-btn" class="dest-interactive-action-btn">
+              ⭐ Draw a Star Pattern
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION G: DREAM DELIVERY MAP
+         ====================================================================== -->
+    <section id="map-section" class="container">
+      <h2 class="section-title">Dream Delivery Map</h2>
+      <p class="section-subtitle">Click the pins on the route to send a traveling star across the worlds.</p>
+
+      <div class="dream-map-viewport">
+        <svg class="map-svg-canvas" viewBox="0 0 1000 440">
+          <!-- Background Star Cluster Overlay -->
+          <circle cx="180" cy="150" r="45" fill="rgba(184, 165, 255, 0.08)" />
+          <circle cx="380" cy="280" r="55" fill="rgba(100, 214, 208, 0.08)" />
+          <circle cx="620" cy="140" r="50" fill="rgba(244, 200, 228, 0.08)" />
+          <circle cx="820" cy="250" r="60" fill="rgba(255, 215, 120, 0.08)" />
+
+          <!-- Connecting Starlight Path -->
+          <path id="celestial-map-route" d="M 180 150 Q 280 230 380 280 T 620 140 T 820 250" 
+                fill="none" stroke="rgba(255, 215, 120, 0.45)" stroke-width="3" stroke-dasharray="6,6" />
+
+          <!-- Traveler Star -->
+          <g id="map-traveler-star" class="map-traveler-star" transform="translate(180, 150)">
+            <circle cx="0" cy="0" r="14" fill="rgba(255, 215, 120, 0.35)" />
+            <polygon points="0,-12 3,-3 12,0 3,3 0,12 -3,3 -12,0 -3,-3" fill="#FFF5E8" />
+          </g>
+
+          <!-- Destination Waypoint Pins -->
+          <g class="map-node-pin" data-target="kingdom" transform="translate(180, 150)">
+            <circle cx="0" cy="0" r="18" fill="#583C84" stroke="#FFD778" stroke-width="2" />
+            <text x="0" y="5" font-size="12" text-anchor="middle" fill="#FFF5E8">🏰</text>
+            <text x="0" y="32" font-size="13" font-family="Cinzel Decorative, serif" text-anchor="middle" fill="#FFD778">Wishfall</text>
+          </g>
+
+          <g class="map-node-pin" data-target="garden" transform="translate(380, 280)">
+            <circle cx="0" cy="0" r="18" fill="#204C6D" stroke="#64D6D0" stroke-width="2" />
+            <text x="0" y="5" font-size="12" text-anchor="middle" fill="#FFF5E8">🪷</text>
+            <text x="0" y="32" font-size="13" font-family="Cinzel Decorative, serif" text-anchor="middle" fill="#64D6D0">Moonlit</text>
+          </g>
+
+          <g class="map-node-pin" data-target="library" transform="translate(620, 140)">
+            <circle cx="0" cy="0" r="18" fill="#3A2768" stroke="#F4C8E4" stroke-width="2" />
+            <text x="0" y="5" font-size="12" text-anchor="middle" fill="#FFF5E8">📖</text>
+            <text x="0" y="32" font-size="13" font-family="Cinzel Decorative, serif" text-anchor="middle" fill="#F4C8E4">Library</text>
+          </g>
+
+          <g class="map-node-pin" data-target="observatory" transform="translate(820, 250)">
+            <circle cx="0" cy="0" r="18" fill="#1F5768" stroke="#FFD778" stroke-width="2" />
+            <text x="0" y="5" font-size="12" text-anchor="middle" fill="#FFF5E8">🔭</text>
+            <text x="0" y="32" font-size="13" font-family="Cinzel Decorative, serif" text-anchor="middle" fill="#FFD778">Observatory</text>
+          </g>
+        </svg>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION H: LULLABY LAB (Web Audio Synthesizer)
+         ====================================================================== -->
+    <section id="lullaby-lab" class="container">
+      <h2 class="section-title">The Music Box</h2>
+      <p class="section-subtitle">Tap the bells to play sweet chimes, or play a gentle bedtime tune.</p>
+
+      <div class="lullaby-lab-container celestial-card">
+        <!-- Mood Presets -->
+        <div class="sound-moods-row">
+          <button class="mood-pill-btn lullaby-mood-btn active" data-mood="moonlight">🌙 Quiet Night</button>
+          <button class="mood-pill-btn lullaby-mood-btn" data-mood="stardust">✨ Star Bells</button>
+          <button class="mood-pill-btn lullaby-mood-btn" data-mood="cloud">☁️ Soft Cloud</button>
+        </div>
+
+        <!-- 8 Chime Pads (Pentatonic Scale) -->
+        <div class="chime-keyboard-rack">
+          <button class="chime-pad-btn" data-note="0">C5</button>
+          <button class="chime-pad-btn" data-note="1">D5</button>
+          <button class="chime-pad-btn" data-note="2">E5</button>
+          <button class="chime-pad-btn" data-note="3">G5</button>
+          <button class="chime-pad-btn" data-note="4">A5</button>
+          <button class="chime-pad-btn" data-note="5">C6</button>
+          <button class="chime-pad-btn" data-note="6">D6</button>
+          <button class="chime-pad-btn" data-note="7">E6</button>
+        </div>
+
+        <div style="display: flex; justify-content: center; gap: 16px; margin-top: 24px;">
+          <button id="toggle-melody-btn" class="btn btn-secondary">
+            ▶ Play Star Lullaby
+          </button>
+        </div>
+        <div style="font-size: 0.8rem; color: var(--pale-cyan); margin-top: 14px;">
+          Plays gentle sounds created right in your browser. Totally quiet until you click a bell.
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION I: NIGHTLIGHT MODE INFO & HIDDEN SECRETS
+         ====================================================================== -->
+    <section class="container" style="text-align: center;">
+      <div class="celestial-card" style="max-width: 680px; margin: 0 auto; position: relative;">
+        <div style="font-size: 2.4rem; margin-bottom: 8px;">🕯️</div>
+        <h3 style="font-size: 1.6rem; color: var(--cream); margin-bottom: 8px;">Nightlight Mode</h3>
+        <p style="font-size: 0.95rem; color: var(--pale-cyan); margin-bottom: 18px; line-height: 1.6;">
+          Turn on the nightlight to follow your mouse with a soft, warm circle of star glow.
+        </p>
+        <button onclick="window.junoNightlight.toggle()" class="btn btn-secondary">
+          Turn Nightlight On / Off
+        </button>
+
+        <!-- Hidden Star #5 in Nightlight Corner -->
+        <div id="nightlight-secret-star" class="nightlight-secret-glyph hidden-star-trigger" data-star-id="5" 
+             style="position: absolute; bottom: 14px; right: 20px; font-size: 1.8rem; cursor: pointer;" 
+             title="You found the nightlight secret star!">
+          ⭐
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION J: INTERACTIVE STORYBOOK
+         ====================================================================== -->
+    <section id="storybook" class="container">
+      <h2 class="section-title">The Storybook</h2>
+      <p class="section-subtitle">Turn the pages to read about Juno's adventures across the stars.</p>
+
+      <div class="storybook-wrapper">
+        <div class="storybook-book">
+          <div class="book-spine-divider"></div>
+
+          <!-- Left Page: Illustration -->
+          <div class="book-left-page">
+            <div id="book-left-art" class="book-illustration-box"></div>
+            <div style="text-align: center; font-size: 0.75rem; color: #64748B; font-style: italic;">
+              A Storybook for Dreamers
+            </div>
+          </div>
+
+          <!-- Right Page: Verse & Bookmark Ribbon -->
+          <div class="book-right-page">
+            <h3 id="book-right-title" style="font-family: var(--font-display); font-size: 1.5rem; color: #10132F; margin-bottom: 14px;">
+              The Sky of Quiet Wishes
+            </h3>
+            <p id="book-right-text" class="book-story-text">
+              Long ago, people looked up and whispered their wishes to the quiet night sky...
+            </p>
+
+            <!-- Hidden Star #6 Bookmark Ribbon -->
+            <div id="book-ribbon-star" class="hidden-star-trigger" data-star-id="6" 
+                 style="display: none; position: absolute; top: 18px; right: 24px; font-size: 1.8rem; cursor: pointer;"
+                 title="A golden star sewn onto the ribbon bookmark!">
+              ⭐
+            </div>
+
+            <!-- Page Navigation Controls -->
+            <div class="book-controls-row">
+              <button id="book-prev-btn" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem; color: #10132F; border-color: #CBD5E1;">
+                ← Prev
+              </button>
+              <span id="book-page-counter" style="font-size: 0.85rem; color: #64748B; font-weight: 600;">
+                Page 1 of 6
+              </span>
+              <button id="book-next-btn" class="btn btn-secondary" style="padding: 8px 16px; font-size: 0.85rem; color: #10132F; border-color: #CBD5E1;">
+                Next →
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ======================================================================
+         SECTION K: CATCH THE FALLING DREAMS (Mini-Game)
+         ====================================================================== -->
+    <section id="mini-game" class="container">
+      <h2 class="section-title">Catch the Falling Dreams</h2>
+      <p class="section-subtitle">Catch bright stars and dream bubbles. Avoid storm clouds. Score 100 points to win a hidden star!</p>
+
+      <div class="game-cabinet-frame">
+        <canvas id="dream-catcher-canvas"></canvas>
+
+        <div style="margin-top: 18px; display: flex; justify-content: center;">
+          <button id="start-game-btn" class="btn btn-primary">
+            ▶ Play the Game
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ========================================================================
+       IMMERSIVE MAGICAL WORLDS THEATER (Expanded Live 2D Worlds)
+       ======================================================================== -->
+  <div id="magical-world-theater" class="magical-world-theater" role="dialog" aria-modal="true" aria-label="Interactive Magical World" aria-hidden="true">
+    <div class="world-theater-backdrop"></div>
+    <div class="world-theater-frame">
+
+      <!-- Top Navigation & Controls Bar -->
+      <div class="world-theater-header">
+        <button id="world-back-btn" class="world-back-btn" aria-label="Back to Worlds">
+          <span class="back-arrow">←</span>
+          <span class="back-text">Back to Worlds</span>
+          <span class="back-sparkle">✨</span>
+        </button>
+
+        <div class="world-title-badge">
+          <span id="world-icon" class="world-badge-icon">🏰</span>
+          <span id="world-name" class="world-badge-name">Wishfall Kingdom</span>
+        </div>
+
+        <div class="world-header-actions">
+          <button id="world-replay-btn" class="world-action-pill" title="Replay this world's magical animation">↺ Replay Magic</button>
+          <span id="world-sound-pill" class="world-sound-pill" title="Sound status">🔔 Celestial Chimes</span>
+        </div>
+      </div>
+
+      <!-- Main Living World Scenery Stage -->
+      <div class="world-stage-container">
+
+        <!-- Juno In-World Living Companion -->
+        <div id="world-juno-slot" class="world-juno-companion">
+          <div id="world-juno-character"></div>
+          <div id="world-juno-hint" class="world-juno-speech-bubble" role="status" aria-live="polite">
+            “Welcome to my world! Click around to awaken the magic!” ✨
+          </div>
+        </div>
+
+        <!-- 1. WORLD 1: WISHFALL KINGDOM -->
+        <div id="world-scene-kingdom" class="world-scene" data-scene="kingdom">
+          <!-- Sky Backdrop & Clouds -->
+          <div class="wf-sky-backdrop">
+            <div class="wf-starfield"></div>
+            <div class="wf-cloud-layer wf-cloud-back"></div>
+            <div class="wf-cloud-layer wf-cloud-mid"></div>
+          </div>
+
+          <!-- Floating Islands & Castle -->
+          <div class="wf-floating-islands-wrapper">
+            <!-- Left Platform (Juno's vantage point) -->
+            <div class="wf-island-platform wf-island-left">
+              <div class="wf-island-rock">
+                <svg viewBox="0 0 280 180" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="wfRockGrad" x1="0%" y1="0%" x2="50%" y2="100%">
+                      <stop offset="0%" stop-color="#4a376e" />
+                      <stop offset="60%" stop-color="#2a2046" />
+                      <stop offset="100%" stop-color="#141126" />
+                    </linearGradient>
+                    <linearGradient id="wfGrassGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stop-color="#70d6b6" />
+                      <stop offset="50%" stop-color="#93c5fd" />
+                      <stop offset="100%" stop-color="#c4b5fd" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M 20 50 Q 80 40 160 45 Q 240 50 260 55 C 240 100 200 150 140 170 C 90 150 40 120 20 50 Z" fill="url(#wfRockGrad)" />
+                  <path d="M 15 50 Q 80 35 160 40 Q 240 45 265 52 Q 240 65 160 60 Q 50 65 15 50 Z" fill="url(#wfGrassGrad)" opacity="0.9" />
+                  <polygon points="50,42 55,20 62,42" fill="#A7E8F5" filter="drop-shadow(0 0 6px #64D6D0)" />
+                  <polygon points="70,45 74,30 80,45" fill="#FFE599" filter="drop-shadow(0 0 6px #FFD778)" />
+                  <polygon points="210,48 215,28 222,48" fill="#F4C8E4" filter="drop-shadow(0 0 6px #F4C8E4)" />
+                </svg>
+              </div>
+              <div class="wf-platform-label">Dreamer's Ridge</div>
+            </div>
+
+            <!-- Center Gap: The Glowing Crystal Bridge -->
+            <div id="wf-bridge-container" class="wf-bridge-container" role="button" tabindex="0" title="Click the crystal bridge to trigger a magical ripple!">
+              <svg class="wf-bridge-svg" viewBox="0 0 460 140" width="100%" height="100%">
+                <defs>
+                  <linearGradient id="crystalSegGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFFFFF" />
+                    <stop offset="40%" stop-color="#A7E8F5" />
+                    <stop offset="100%" stop-color="#38BDF8" />
+                  </linearGradient>
+                  <linearGradient id="crystalSegGrad2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFFDF0" />
+                    <stop offset="40%" stop-color="#FFE599" />
+                    <stop offset="100%" stop-color="#F59E0B" />
+                  </linearGradient>
+                  <filter id="crystalGlow" x="-30%" y="-30%" width="160%" height="160%">
+                    <feGaussianBlur stdDeviation="5" result="blur" />
+                    <feMerge>
+                      <feMergeNode in="blur" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+                </defs>
+
+                <!-- Starlight Guide Arc -->
+                <path class="wf-bridge-guide-arc" d="M 20 85 Q 230 40 440 85" fill="none" stroke="rgba(255, 215, 120, 0.3)" stroke-width="2" stroke-dasharray="4,6" />
+
+                <!-- 6 Assembling Crystal Segments -->
+                <g id="wf-bridge-segments">
+                  <!-- Segment 1 -->
+                  <g id="wf-seg-1" class="wf-crystal-segment" data-step="1">
+                    <polygon points="35,82 60,65 85,82 60,98" fill="url(#crystalSegGrad1)" filter="url(#crystalGlow)" />
+                    <polygon points="45,82 60,70 75,82 60,92" fill="#FFFFFF" opacity="0.6" />
+                    <circle cx="60" cy="82" r="3" fill="#FFF" />
+                  </g>
+                  <!-- Segment 2 -->
+                  <g id="wf-seg-2" class="wf-crystal-segment" data-step="2">
+                    <polygon points="95,74 125,55 155,74 125,92" fill="url(#crystalSegGrad2)" filter="url(#crystalGlow)" />
+                    <polygon points="108,74 125,62 142,74 125,85" fill="#FFFFFF" opacity="0.6" />
+                    <circle cx="125" cy="74" r="3" fill="#FFF" />
+                  </g>
+                  <!-- Segment 3 -->
+                  <g id="wf-seg-3" class="wf-crystal-segment" data-step="3">
+                    <polygon points="165,68 195,48 225,68 195,86" fill="url(#crystalSegGrad1)" filter="url(#crystalGlow)" />
+                    <polygon points="178,68 195,54 212,68 195,78" fill="#FFFFFF" opacity="0.6" />
+                    <circle cx="195" cy="68" r="3.5" fill="#FFF" />
+                  </g>
+                  <!-- Segment 4 -->
+                  <g id="wf-seg-4" class="wf-crystal-segment" data-step="4">
+                    <polygon points="235,68 265,48 295,68 265,86" fill="url(#crystalSegGrad2)" filter="url(#crystalGlow)" />
+                    <polygon points="248,68 265,54 282,68 265,78" fill="#FFFFFF" opacity="0.6" />
+                    <circle cx="265" cy="68" r="3.5" fill="#FFF" />
+                  </g>
+                  <!-- Segment 5 -->
+                  <g id="wf-seg-5" class="wf-crystal-segment" data-step="5">
+                    <polygon points="305,74 335,55 365,74 335,92" fill="url(#crystalSegGrad1)" filter="url(#crystalGlow)" />
+                    <polygon points="318,74 335,62 352,74 335,85" fill="#FFFFFF" opacity="0.6" />
+                    <circle cx="335" cy="74" r="3" fill="#FFF" />
+                  </g>
+                  <!-- Segment 6 -->
+                  <g id="wf-seg-6" class="wf-crystal-segment" data-step="6">
+                    <polygon points="375,82 400,65 425,82 400,98" fill="url(#crystalSegGrad2)" filter="url(#crystalGlow)" />
+                    <polygon points="385,82 400,70 415,82 400,92" fill="#FFFFFF" opacity="0.6" />
+                    <circle cx="400" cy="82" r="3" fill="#FFF" />
+                  </g>
+                </g>
+
+                <!-- Radiant Completion Energy Beam -->
+                <path id="wf-bridge-beam" class="wf-bridge-beam" d="M 30 84 Q 230 42 430 84" fill="none" stroke="url(#crystalSegGrad2)" stroke-width="6" stroke-linecap="round" />
+              </svg>
+
+              <!-- Interactive prompt on bridge -->
+              <div id="wf-bridge-prompt" class="wf-bridge-prompt">
+                <span class="prompt-icon">✨</span> Click the crystal bridge!
+              </div>
+              <div id="wf-ripple-container" class="wf-ripple-container"></div>
+            </div>
+
+            <!-- Right Platform (Wishfall Citadel Castle) -->
+            <div class="wf-island-platform wf-island-right">
+              <div class="wf-castle-art">
+                <svg viewBox="0 0 320 280" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="wfCastleSpire" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stop-color="#B8A5FF" />
+                      <stop offset="50%" stop-color="#6D28D9" />
+                      <stop offset="100%" stop-color="#2E1065" />
+                    </linearGradient>
+                    <linearGradient id="wfCastleWall" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#5B21B6" />
+                      <stop offset="100%" stop-color="#1E1B4B" />
+                    </linearGradient>
+                    <linearGradient id="wfWindowGlow" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#FFFDF0" />
+                      <stop offset="60%" stop-color="#FFD778" />
+                      <stop offset="100%" stop-color="#D97706" />
+                    </linearGradient>
+                  </defs>
+                  <path d="M 40 180 Q 160 170 280 185 C 260 250 200 280 150 280 C 100 280 55 240 40 180 Z" fill="url(#wfRockGrad)" />
+                  <path d="M 35 180 Q 160 165 285 180 Q 260 195 160 190 Q 60 195 35 180 Z" fill="url(#wfGrassGrad)" />
+                  <path class="wf-waterfall" d="M 230 185 Q 235 230 232 275" stroke="#A7E8F5" stroke-width="4" stroke-dasharray="8,4" fill="none" opacity="0.8" />
+                  <rect x="110" y="90" width="100" height="95" rx="4" fill="url(#wfCastleWall)" />
+                  <polygon points="105,90 105,80 120,80 120,90 135,90 135,80 150,80 150,90 165,90 165,80 180,80 180,90 195,90 195,80 215,80 215,90" fill="#7C3AED" />
+                  <polygon points="160,15 135,80 185,80" fill="url(#wfCastleSpire)" />
+                  <circle cx="160" cy="15" r="5" fill="#FFD778" filter="drop-shadow(0 0 8px #FFE599)" />
+                  <rect x="75" y="110" width="40" height="75" fill="url(#wfCastleWall)" />
+                  <polygon points="95,45 70,110 120,110" fill="url(#wfCastleSpire)" />
+                  <circle cx="95" cy="45" r="3.5" fill="#FFD778" />
+                  <rect x="205" y="110" width="40" height="75" fill="url(#wfCastleWall)" />
+                  <polygon points="225,45 200,110 250,110" fill="url(#wfCastleSpire)" />
+                  <circle cx="225" cy="45" r="3.5" fill="#FFD778" />
+                  <rect class="wf-window-glow" x="145" y="105" width="30" height="42" rx="15" fill="url(#wfWindowGlow)" filter="drop-shadow(0 0 10px #FFD778)" />
+                  <path d="M 160 105 L 160 147 M 145 125 L 175 125" stroke="#78350F" stroke-width="1.5" />
+                  <rect class="wf-window-glow" x="88" y="125" width="14" height="22" rx="7" fill="url(#wfWindowGlow)" filter="drop-shadow(0 0 6px #FFD778)" />
+                  <rect class="wf-window-glow" x="218" y="125" width="14" height="22" rx="7" fill="url(#wfWindowGlow)" filter="drop-shadow(0 0 6px #FFD778)" />
+                </svg>
+              </div>
+              <div class="wf-platform-label">Wishfall Citadel</div>
+            </div>
+          </div>
+
+          <!-- Foreground Cloud Layer -->
+          <div class="wf-cloud-layer wf-cloud-front"></div>
+        </div>
+
+        <!-- 2. WORLD 2: MOONLIT GARDEN -->
+        <div id="world-scene-garden" class="world-scene" data-scene="garden">
+          <!-- Sky Backdrop & Luminous Moon -->
+          <div class="mg-sky-backdrop">
+            <div class="mg-moon-wrapper">
+              <div class="mg-glowing-moon">
+                <svg viewBox="0 0 160 160" width="100%" height="100%">
+                  <defs>
+                    <radialGradient id="mgMoonGlow" cx="50%" cy="50%" r="50%">
+                      <stop offset="0%" stop-color="#FFFFFF" />
+                      <stop offset="65%" stop-color="#E0F2FE" />
+                      <stop offset="85%" stop-color="#BAE6FD" />
+                      <stop offset="100%" stop-color="#7DD3FC" stop-opacity="0" />
+                    </radialGradient>
+                  </defs>
+                  <circle cx="80" cy="80" r="72" fill="url(#mgMoonGlow)" />
+                  <circle cx="80" cy="80" r="54" fill="#F0F9FF" />
+                  <circle cx="65" cy="65" r="9" fill="#E2E8F0" opacity="0.6" />
+                  <circle cx="95" cy="60" r="6" fill="#E2E8F0" opacity="0.6" />
+                  <circle cx="75" cy="98" r="12" fill="#E2E8F0" opacity="0.6" />
+                  <circle cx="102" cy="90" r="7" fill="#E2E8F0" opacity="0.5" />
+                </svg>
+              </div>
+            </div>
+            <div class="mg-moonlight-beam"></div>
+          </div>
+
+          <!-- Hanging willow branch silhouettes with starlight dew -->
+          <div class="mg-foliage-left"></div>
+          <div class="mg-foliage-right"></div>
+
+          <!-- Central Enchanted Pond & Sacred Moon Lotus -->
+          <div class="mg-pond-container">
+            <div class="mg-pond-ripples">
+              <div class="mg-ripple-ring ring-1"></div>
+              <div class="mg-ripple-ring ring-2"></div>
+              <div class="mg-ripple-ring ring-3"></div>
+            </div>
+
+            <!-- Clickable Sacred Lotus -->
+            <div id="mg-lotus-interactive" class="mg-lotus-wrapper" role="button" tabindex="0" title="Click the lotus to bloom its magical petals!">
+              <svg class="mg-lotus-svg" viewBox="0 0 280 220" width="100%" height="100%">
+                <defs>
+                  <radialGradient id="mgStamenGrad" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#FFFFFF" />
+                    <stop offset="40%" stop-color="#FFD778" />
+                    <stop offset="100%" stop-color="#F59E0B" />
+                  </radialGradient>
+                  <linearGradient id="mgLilyPad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#059669" />
+                    <stop offset="100%" stop-color="#064E3B" />
+                  </linearGradient>
+                  <linearGradient id="mgPetalOuter" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#F4C8E4" />
+                    <stop offset="50%" stop-color="#C084FC" />
+                    <stop offset="100%" stop-color="#581C87" />
+                  </linearGradient>
+                  <linearGradient id="mgPetalInner" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#FFFFFF" />
+                    <stop offset="50%" stop-color="#A7E8F5" />
+                    <stop offset="100%" stop-color="#2DD4BF" />
+                  </linearGradient>
+                </defs>
+
+                <!-- Lily Pad Base -->
+                <ellipse cx="140" cy="180" rx="115" ry="28" fill="url(#mgLilyPad)" opacity="0.85" />
+                <path d="M 140 180 L 235 170" stroke="#047857" stroke-width="2" />
+                <ellipse cx="140" cy="185" rx="130" ry="32" fill="none" stroke="#64D6D0" stroke-width="1.5" opacity="0.4" />
+
+                <!-- Outer Lotus Petals (Unfurl on click) -->
+                <g id="mg-petals-outer" class="mg-petals-group">
+                  <path class="mg-petal petal-far-left" d="M 140 170 C 90 160 50 120 70 85 C 90 60 125 120 140 170 Z" fill="url(#mgPetalOuter)" />
+                  <path class="mg-petal petal-far-right" d="M 140 170 C 190 160 230 120 210 85 C 190 60 155 120 140 170 Z" fill="url(#mgPetalOuter)" />
+                  <path class="mg-petal petal-mid-left" d="M 140 170 C 105 140 85 90 110 65 C 130 50 145 110 140 170 Z" fill="url(#mgPetalOuter)" />
+                  <path class="mg-petal petal-mid-right" d="M 140 170 C 175 140 195 90 170 65 C 150 50 135 110 140 170 Z" fill="url(#mgPetalOuter)" />
+                </g>
+
+                <!-- Inner Luminous Petals -->
+                <g id="mg-petals-inner" class="mg-petals-group">
+                  <path class="mg-petal petal-inner-left" d="M 140 170 C 115 130 110 80 130 50 C 145 70 145 120 140 170 Z" fill="url(#mgPetalInner)" />
+                  <path class="mg-petal petal-inner-right" d="M 140 170 C 165 130 170 80 150 50 C 135 70 135 120 140 170 Z" fill="url(#mgPetalInner)" />
+                  <path class="mg-petal petal-center" d="M 140 170 C 128 110 128 65 140 38 C 152 65 152 110 140 170 Z" fill="#FFFDF0" />
+                </g>
+
+                <!-- Radiant Golden Stamen Gem -->
+                <g id="mg-lotus-stamen" class="mg-lotus-stamen">
+                  <circle cx="140" cy="140" r="16" fill="url(#mgStamenGrad)" filter="drop-shadow(0 0 14px #FFD778)" />
+                  <polygon points="140,126 143,136 153,140 143,144 140,154 137,144 127,140 137,136" fill="#FFFFFF" />
+                </g>
+              </svg>
+
+              <div id="mg-lotus-hint" class="mg-lotus-hint">
+                <span class="hint-sparkle">🌸</span> Touch the lotus to bloom
+              </div>
+            </div>
+
+            <!-- Bioluminescent Mushrooms on Banks -->
+            <div class="mg-mushroom-group left">
+              <span class="mg-shroom" title="Glowing garden sprout">🍄</span>
+              <span class="mg-shroom gem" title="Dewdrop">✨</span>
+            </div>
+            <div class="mg-mushroom-group right">
+              <span class="mg-shroom" title="Glowing garden sprout">🍄</span>
+              <span class="mg-shroom lily" title="Little water blossom">🪷</span>
+            </div>
+          </div>
+
+          <!-- Blue Fireflies Organic Flight Layer -->
+          <div id="mg-fireflies-layer" class="mg-fireflies-layer"></div>
+        </div>
+
+        <!-- 3. WORLD 3: DREAM LIBRARY -->
+        <div id="world-scene-library" class="world-scene" data-scene="library">
+          <!-- Towering Bookshelves & Warm Lanterns -->
+          <div class="dl-background-hall">
+            <div class="dl-shelf-column dl-shelf-left"></div>
+            <div class="dl-shelf-column dl-shelf-right"></div>
+            <div class="dl-lantern dl-lantern-1"><div class="lantern-glow"></div>🏮</div>
+            <div class="dl-lantern dl-lantern-2"><div class="lantern-glow"></div>🏮</div>
+          </div>
+
+          <!-- Floating Interactive Storybooks Drifting in Air -->
+          <div class="dl-floating-books-space">
+            <div id="dl-fbook-1" class="dl-floating-book" data-book-id="1" role="button" tabindex="0" title="Click to read 'The Constellation Atlas'">
+              <span class="book-spine-gem">⭐</span>
+              <span class="book-spine-text">Atlas of Stars</span>
+            </div>
+            <div id="dl-fbook-2" class="dl-floating-book" data-book-id="2" role="button" tabindex="0" title="Click to read 'Whispers of the Moon'">
+              <span class="book-spine-gem">🌙</span>
+              <span class="book-spine-text">Moon Whispers</span>
+            </div>
+            <div id="dl-fbook-3" class="dl-floating-book" data-book-id="3" role="button" tabindex="0" title="Click to read 'The Book of Tomorrow'">
+              <span class="book-spine-gem">🌸</span>
+              <span class="book-spine-text">Book of Tomorrow</span>
+            </div>
+            <div id="dl-fbook-4" class="dl-floating-book" data-book-id="4" role="button" tabindex="0" title="Click to read 'Tale of a Fallen Star'">
+              <span class="book-spine-gem">🗝️</span>
+              <span class="book-spine-text">The Fallen Star</span>
+            </div>
+          </div>
+
+          <!-- Centerpiece: Pedestal with Ancient Enchanted Book -->
+          <div class="dl-pedestal-stage">
+            <div id="dl-rising-runes-container" class="dl-rising-runes"></div>
+
+            <!-- Enchanted Tome on Pedestal -->
+            <div id="dl-pedestal-book" class="dl-pedestal-book" role="button" tabindex="0" title="Click to open the Ancient Wish Tome!">
+              <div class="dl-book-3d-wrapper">
+                <div class="dl-book-cover dl-book-back"></div>
+                <div class="dl-book-pages-stack"></div>
+                <div class="dl-book-pages-open">
+                  <div class="dl-page-leaf left">
+                    <div class="dl-page-header">✦ CHAPTER OF DREAMS ✦</div>
+                    <div class="dl-page-line"></div>
+                    <div class="dl-page-line short"></div>
+                    <div class="dl-page-rune">✨</div>
+                  </div>
+                  <div class="dl-page-leaf right">
+                    <div class="dl-page-header">✦ STARCHART ✦</div>
+                    <div class="dl-page-line"></div>
+                    <div class="dl-page-line"></div>
+                    <div class="dl-page-rune">⭐</div>
+                  </div>
+                </div>
+                <div class="dl-book-cover dl-book-front">
+                  <div class="book-front-emblem">
+                    <div class="book-gold-star">⭐</div>
+                    <div class="book-title-gold">THE WISH TOME</div>
+                    <div class="book-subtitle-gold">Click to Open</div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Stone Pedestal Art -->
+              <div class="dl-stone-pedestal">
+                <svg viewBox="0 0 200 120" width="100%" height="100%">
+                  <defs>
+                    <linearGradient id="dlPedestalGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#3b2b54" />
+                      <stop offset="60%" stop-color="#241a35" />
+                      <stop offset="100%" stop-color="#120c1d" />
+                    </linearGradient>
+                  </defs>
+                  <ellipse cx="100" cy="20" rx="90" ry="16" fill="url(#dlPedestalGrad)" stroke="#FFD778" stroke-width="1.5" />
+                  <path d="M 40 20 L 60 95 L 140 95 L 160 20 Z" fill="url(#dlPedestalGrad)" />
+                  <ellipse cx="100" cy="100" rx="85" ry="18" fill="url(#dlPedestalGrad)" stroke="#FFD778" stroke-width="1.5" />
+                  <circle cx="100" cy="60" r="10" fill="#202653" stroke="#A7E8F5" stroke-width="1.5" />
+                  <polygon points="100,53 103,58 108,60 103,62 100,67 97,62 92,60 97,58" fill="#FFD778" />
+                </svg>
+              </div>
+            </div>
+
+            <!-- Active Story Fragment Parchment Plaque -->
+            <div id="dl-parchment-plaque" class="dl-parchment-plaque">
+              <div class="plaque-corner top-left">✦</div>
+              <div class="plaque-corner top-right">✦</div>
+              <div id="dl-fragment-title" class="dl-fragment-title">An Ancient Page Unfolds:</div>
+              <div id="dl-fragment-quote" class="dl-fragment-quote">“Somewhere, a forgotten star is waiting to be found.”</div>
+              <div class="plaque-footer">Click any floating book in the library to reveal another wish.</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. WORLD 4: STARDUST OBSERVATORY -->
+        <div id="world-scene-observatory" class="world-scene" data-scene="observatory">
+          <!-- Deep Cosmos & Rotating Ringed Planet -->
+          <div class="so-cosmos-backdrop">
+            <div class="so-ringed-planet">
+              <div class="planet-body"></div>
+              <div class="planet-ring"></div>
+            </div>
+            <div class="so-nebula-glow"></div>
+            <div id="so-shooting-star" class="so-shooting-star"></div>
+          </div>
+
+          <!-- Interactive Constellation Drawing Canvas -->
+          <div class="so-constellation-sky">
+            <svg id="so-constellation-svg" class="so-constellation-svg" viewBox="0 0 800 480" width="100%" height="100%">
+              <defs>
+                <filter id="soStarGlow" x="-50%" y="-50%" width="200%" height="200%">
+                  <feGaussianBlur stdDeviation="6" result="blur" />
+                  <feMerge>
+                    <feMergeNode in="blur" />
+                    <feMergeNode in="SourceGraphic" />
+                  </feMerge>
+                </filter>
+                <linearGradient id="soLineGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#FFE599" />
+                  <stop offset="50%" stop-color="#FFD778" />
+                  <stop offset="100%" stop-color="#64D6D0" />
+                </linearGradient>
+              </defs>
+
+              <g id="so-drawn-lines"></g>
+
+              <g id="so-lamp-constellation-aura" class="so-lamp-aura" opacity="0">
+                <path d="M 230 330 C 230 240 370 230 460 230 C 550 230 640 240 640 330 C 640 380 520 410 440 410 C 350 410 230 380 230 330 Z" 
+                      fill="rgba(255, 215, 120, 0.12)" stroke="#FFD778" stroke-width="2.5" stroke-dasharray="6,6" />
+              </g>
+            </svg>
+
+            <!-- The 4 Constellation Interactive Stars -->
+            <div class="so-stars-container">
+              <div id="so-star-1" class="so-target-star" data-star-index="1" style="top: 28%; left: 24%;" role="button" tabindex="0" title="Star 1: Starlight Spout">
+                <div class="so-star-pulse-ring"></div>
+                <div class="so-star-icon">⭐</div>
+                <span class="so-star-label">1. Starlight Spout</span>
+              </div>
+              <div id="so-star-2" class="so-target-star" data-star-index="2" style="top: 22%; left: 72%;" role="button" tabindex="0" title="Star 2: Golden Handle">
+                <div class="so-star-pulse-ring"></div>
+                <div class="so-star-icon">⭐</div>
+                <span class="so-star-label">2. Golden Handle</span>
+              </div>
+              <div id="so-star-3" class="so-target-star" data-star-index="3" style="top: 64%; left: 78%;" role="button" tabindex="0" title="Star 3: Base of Hope">
+                <div class="so-star-pulse-ring"></div>
+                <div class="so-star-icon">⭐</div>
+                <span class="so-star-label">3. Base of Hope</span>
+              </div>
+              <div id="so-star-4" class="so-target-star" data-star-index="4" style="top: 68%; left: 22%;" role="button" tabindex="0" title="Star 4: Wish Hearth">
+                <div class="so-star-pulse-ring"></div>
+                <div class="so-star-icon">⭐</div>
+                <span class="so-star-label">4. Wish Hearth</span>
+              </div>
+            </div>
+
+            <!-- Revealed Tiny Magical Animated Lamp (Appears upon completing 4 stars) -->
+            <div id="so-revealed-lamp" class="so-revealed-lamp">
+              <div class="so-lamp-sparkle-halo"></div>
+              <svg viewBox="0 0 200 120" width="180" height="110">
+                <defs>
+                  <linearGradient id="soLampGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFFDF5" />
+                    <stop offset="35%" stop-color="#FFE599" />
+                    <stop offset="70%" stop-color="#F59E0B" />
+                    <stop offset="100%" stop-color="#B45309" />
+                  </linearGradient>
+                </defs>
+                <path d="M 25 70 C 25 45 65 42 100 42 C 135 42 175 45 175 70 C 175 88 135 96 100 96 C 65 96 25 88 25 70 Z" fill="url(#soLampGrad)" filter="drop-shadow(0 0 16px #FFD778)" />
+                <path d="M 160 55 Q 195 35 190 28 Q 180 24 155 48 Z" fill="url(#soLampGrad)" />
+                <path d="M 40 55 Q 8 35 12 25 Q 22 20 45 48 Z" fill="url(#soLampGrad)" />
+                <ellipse cx="100" cy="40" rx="26" ry="9" fill="#FFE599" />
+                <circle cx="100" cy="28" r="6" fill="#FFD778" />
+                <circle cx="100" cy="70" r="12" fill="#202653" stroke="#FFD778" stroke-width="1.5" />
+                <polygon points="100,61 103,67 110,68 105,73 107,80 100,76 93,80 95,73 90,68 97,67" fill="#FFD778" />
+              </svg>
+              <div class="so-lamp-title">Juno's Ancient Wish Lamp</div>
+            </div>
+
+            <!-- Constellation Status Banner -->
+            <div id="so-status-pill" class="so-status-pill">
+              🔭 Click the telescope to locate the hidden stars!
+            </div>
+          </div>
+
+          <!-- Foreground Observatory Balcony & Brass Telescope -->
+          <div class="so-observatory-balcony">
+            <div class="so-balcony-railing"></div>
+
+            <div id="so-telescope-instrument" class="so-telescope-instrument" role="button" tabindex="0" title="Click to aim telescope at the stars!">
+              <svg class="so-telescope-svg" viewBox="0 0 220 180" width="100%" height="100%">
+                <defs>
+                  <linearGradient id="soBrassGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFFDF5" />
+                    <stop offset="30%" stop-color="#FCD34D" />
+                    <stop offset="70%" stop-color="#D97706" />
+                    <stop offset="100%" stop-color="#78350F" />
+                  </linearGradient>
+                </defs>
+                <line x1="110" y1="100" x2="60" y2="175" stroke="url(#soBrassGrad)" stroke-width="5" stroke-linecap="round" />
+                <line x1="110" y1="100" x2="110" y2="175" stroke="url(#soBrassGrad)" stroke-width="5" stroke-linecap="round" />
+                <line x1="110" y1="100" x2="160" y2="175" stroke="url(#soBrassGrad)" stroke-width="5" stroke-linecap="round" />
+                <circle cx="110" cy="100" r="8" fill="#F59E0B" />
+
+                <g id="so-telescope-barrel" class="so-telescope-barrel">
+                  <rect x="50" y="55" width="115" height="24" rx="4" fill="url(#soBrassGrad)" transform="rotate(-30 110 67)" />
+                  <rect x="145" y="52" width="30" height="30" rx="3" fill="#FFE599" transform="rotate(-30 110 67)" filter="drop-shadow(0 0 8px #FFD778)" />
+                  <rect x="35" y="60" width="22" height="14" rx="2" fill="#78350F" transform="rotate(-30 110 67)" />
+                  <circle cx="170" cy="38" r="7" fill="#64D6D0" opacity="0.8" filter="drop-shadow(0 0 10px #22D3EE)" />
+                </g>
+              </svg>
+              <div class="so-telescope-tag">✨ Click to Aim Telescope</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Bottom World Story Caption Bar -->
+      <div class="world-caption-bar">
+        <div class="caption-filigree left">✦</div>
+        <p id="world-story-caption" class="world-story-caption">
+          “A path appears whenever a brave little wish takes flight.”
+        </p>
+        <div class="caption-filigree right">✦</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================================
+       MODAL OVERLAYS: STAR CODEX & THE PLACE BETWEEN WISHES
+       ======================================================================== -->
+  <!-- 1. Star Codex Clues Modal -->
+  <div id="star-codex-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="codex-title">
+    <div class="modal-box">
+      <button class="modal-close-btn" aria-label="Close modal">✕</button>
+      <h3 id="codex-title" style="font-family: var(--font-display); font-size: 1.8rem; color: var(--magical-gold); margin-bottom: 6px;">
+        ⭐ Star Codex
+      </h3>
+      <p style="font-size: 0.9rem; color: var(--pale-cyan); margin-bottom: 24px;">
+        There are seven hidden golden stars across this website. Find them all to open a secret world!
+      </p>
+
+      <div id="codex-stars-list"></div>
+    </div>
+  </div>
+
+  <!-- 2. "The Place Between Wishes" Secret Finale Sanctuary Modal -->
+  <div id="place-between-wishes-modal" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="secret-title">
+    <div class="modal-box" style="text-align: center; max-width: 600px; border-color: var(--magical-gold); box-shadow: 0 0 50px var(--magical-gold);">
+      <button class="modal-close-btn" aria-label="Close modal">✕</button>
+
+      <div class="secret-vault-badge">👑</div>
+      <h3 id="secret-title" style="font-family: var(--font-display); font-size: 2.2rem; color: var(--magical-gold); margin-bottom: 12px;">
+        The Place Between Wishes
+      </h3>
+
+      <p style="font-size: 1.25rem; font-family: var(--font-serif); color: var(--cream); font-style: italic; line-height: 1.6; margin-bottom: 24px;">
+        “You found the star I could never reach. I think it was waiting for you all along!”
+      </p>
+
+      <p style="font-size: 0.95rem; color: var(--pale-cyan); margin-bottom: 30px; line-height: 1.6;">
+        You found all seven golden stars and helped Juno explore the night sky. You are now a true Guardian of Wishes!
+      </p>
+
+      <div style="background: rgba(255, 215, 120, 0.15); border: 1px solid var(--magical-gold); border-radius: var(--radius-md); padding: 18px; margin-bottom: 24px;">
+        <div style="font-weight: 700; color: var(--magical-gold); font-size: 1.1rem; letter-spacing: 0.05em;">
+          ✦ DREAM GUARDIAN BADGE UNLOCKED ✦
+        </div>
+        <div style="font-size: 0.85rem; color: var(--cream); margin-top: 4px;">
+          • Juno: The Wish That Fell From the Stars
+        </div>
+      </div>
+
+      <button onclick="document.getElementById('place-between-wishes-modal').classList.remove('open')" class="btn btn-primary">
+        Back to the Stars ✨
+      </button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer style="padding: 60px 0 40px 0; border-top: 1px solid var(--glass-border); text-align: center; font-size: 0.9rem; color: var(--pale-cyan); position: relative; z-index: 2;">
+    <div class="container">
+      <div style="font-family: var(--font-display); font-size: 1.4rem; color: var(--cream); margin-bottom: 8px;">
+        JUNO — The Wish That Fell From the Stars
+      </div>
+      <p style="margin-bottom: 16px; font-style: italic;">“Every wish hides a world. Juno knows the way.”</p>
+    <div style="margin-top: 24px; padding-top: 20px; border-top: 1px dashed var(--glass-border); display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; font-size: 0.82rem;">
+      <span style="background: var(--glass-card); padding: 6px 14px; border-radius: var(--radius-full); border: 1px solid var(--glass-border);">🧱 Building Blocks: HTML & CSS</span>
+      <span style="background: var(--glass-card); padding: 6px 14px; border-radius: var(--radius-full); border: 1px solid var(--glass-border);">🧸 Plushie Pals: React 19 & TypeScript</span>
+      <span style="background: var(--glass-card); padding: 6px 14px; border-radius: var(--radius-full); border: 1px solid var(--glass-border);">🎨 Finger Paint: Tailwind CSS, SVG character art, animations, and spotlight effects</span>
+      <span style="background: var(--glass-card); padding: 6px 14px; border-radius: var(--radius-full); border: 1px solid var(--glass-border);">🤖 Toy Robot: Google AI Studio</span>
+      <span style="background: var(--glass-card); padding: 6px 14px; border-radius: var(--radius-full); border: 1px solid var(--glass-border);">🎶 Magic Chime: Web Audio API synth & HTML5 Canvas mini-game</span>
+    </div>
+  </div>
+</footer>
+
+  <!-- Scripts -->
+  <script src="js/juno-character.js"></script>
+  <script src="js/birth-story.js"></script>
+  <script src="js/wish-machine.js"></script>
+  <script src="js/magic-toolbox.js"></script>
+  <script src="js/destinations.js"></script>
+  <script src="js/lullaby-lab.js"></script>
+  <script src="js/nightlight.js"></script>
+  <script src="js/storybook.js"></script>
+  <script src="js/mini-game.js"></script>
+  <script src="js/hidden-stars.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>

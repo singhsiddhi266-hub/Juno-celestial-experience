@@ -1,0 +1,191 @@
+/* ==========================================================================
+   JUNO 2D CHARACTER STYLES & ANIMATIONS
+   Layered 2D SVG Character: Eyes, Eyelids, Floating, Blinking & Reactions
+   ========================================================================== */
+
+/* Character Wrapper Container */
+.juno-character-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.juno-character-wrapper:focus {
+  outline: 2px solid var(--magical-gold);
+  outline-offset: 8px;
+  border-radius: var(--radius-lg);
+}
+
+/* Floating Animation */
+.juno-floating {
+  animation: juno-float-idle 5.2s ease-in-out infinite;
+  transform-origin: center bottom;
+}
+
+@keyframes juno-float-idle {
+  0% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  30% {
+    transform: translateY(-12px) rotate(1.2deg);
+  }
+  65% {
+    transform: translateY(-6px) rotate(-1deg);
+  }
+  100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+}
+
+/* Tail wave delay */
+.juno-tail-layer {
+  transform-origin: 150px 240px;
+  animation: juno-tail-sway 4.4s ease-in-out infinite alternate;
+}
+
+@keyframes juno-tail-sway {
+  0% {
+    transform: rotate(-3deg) skewX(-2deg);
+  }
+  50% {
+    transform: rotate(2deg) skewX(2deg);
+  }
+  100% {
+    transform: rotate(5deg) skewX(3.5deg);
+  }
+}
+
+/* Head and Turban tilt */
+.juno-head-layer {
+  transform-origin: 150px 150px;
+  transition: transform 0.35s ease;
+}
+
+/* Eyelids & Blinking */
+.juno-eyelid {
+  transform-origin: center top;
+  transition: transform 0.08s ease-in-out;
+}
+
+/* Blinking trigger class */
+.juno-character-svg.blinking .juno-eyelid-top {
+  transform: translateY(18px) scaleY(1.1);
+}
+
+.juno-character-svg.blinking .juno-eyelid-bottom {
+  transform: translateY(-8px) scaleY(1.1);
+}
+
+/* Pupils and Irises tracking */
+.juno-pupil-group {
+  transition: transform 0.12s cubic-bezier(0.2, 0.8, 0.4, 1);
+  will-change: transform;
+}
+
+/* Expressions */
+/* Default / Curious: slightly tilted head, pupils wide */
+.juno-character-svg[data-state="curious"] .juno-head-layer {
+  transform: rotate(4deg) translateY(-2px);
+}
+
+/* Happy: cheeks blush more, eyes curl into crescents */
+.juno-character-svg[data-state="happy"] .juno-cheek-blush {
+  opacity: 0.9;
+  transform: scale(1.15);
+}
+
+.juno-character-svg[data-state="happy"] .juno-mouth-smile {
+  d: path("M 138 178 Q 150 188 162 178");
+}
+
+/* Surprised / Wonder: mouth opens into tiny O */
+.juno-character-svg[data-state="wonder"] .juno-mouth-smile {
+  d: path("M 144 176 A 6 8 0 1 0 156 176 A 6 8 0 1 0 144 176");
+}
+
+/* Celebrating / Bounce */
+.juno-bounce {
+  animation: juno-happy-bounce 0.65s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes juno-happy-bounce {
+  0% {
+    transform: scale(1) translateY(0);
+  }
+  30% {
+    transform: scale(1.1, 0.92) translateY(4px);
+  }
+  60% {
+    transform: scale(0.95, 1.12) translateY(-22px) rotate(3deg);
+  }
+  85% {
+    transform: scale(1.04, 0.98) translateY(-4px) rotate(-1.5deg);
+  }
+  100% {
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Click Sparkles Effect */
+.juno-click-sparkle {
+  position: absolute;
+  pointer-events: none;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--magical-gold);
+  box-shadow: 0 0 12px var(--magical-gold), 0 0 20px var(--cream);
+  animation: sparkle-burst 0.75s ease-out forwards;
+}
+
+@keyframes sparkle-burst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1.4);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tx), var(--ty)) scale(0.2);
+  }
+}
+
+/* Turban Gemstone Glow */
+.juno-gem-glow {
+  animation: gem-pulse 3s infinite ease-in-out;
+  transform-origin: center;
+}
+
+@keyframes gem-pulse {
+  0%, 100% {
+    filter: drop-shadow(0 0 4px var(--teal)) drop-shadow(0 0 10px rgba(100, 214, 208, 0.6));
+  }
+  50% {
+    filter: drop-shadow(0 0 8px var(--pale-cyan)) drop-shadow(0 0 16px rgba(167, 232, 245, 0.9));
+  }
+}
+
+/* SVG Character Rendering Size Guidelines */
+.juno-hero-size {
+  width: 320px;
+  height: 380px;
+}
+
+.juno-medium-size {
+  width: 240px;
+  height: 290px;
+}
+
+.juno-small-size {
+  width: 140px;
+  height: 170px;
+}
+
+@media (max-width: 768px) {
+  .juno-hero-size {
+    width: 260px;
+    height: 310px;
+  }
+}
